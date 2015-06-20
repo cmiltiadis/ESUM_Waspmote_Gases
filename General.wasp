@@ -1,0 +1,75 @@
+//outputs battery
+void getBatteryReading(){
+  // Show the remaining battery level
+  USB.print(F("Battery Level: "));
+  USB.print(PWR.getBatteryLevel(),DEC);
+  USB.print(F(" %"));
+  // Show the battery Volts
+  USB.print(F(" | Battery (Volts): "));
+  USB.print(PWR.getBatteryVolts());
+  USB.println(F(" V")); 
+}
+//prints On for true Off for false
+void printBool(boolean val){
+  if (val) USB.println("ON");  
+  else USB.println("OFF"); 
+}
+
+//outputs the settings for the readings
+void printSensorSetup(){
+  USB.println(F("SENSOR SETUP")); 
+
+  USB.print(F("Temperature:")); 
+  printBool(readTemp); 
+  //
+  USB.print(F("Pressure: ")); 
+  printBool(readPressure); 
+  //
+  USB.print(F("CO2:")); 
+  printBool(readCO2);  
+  //
+  USB.print(F("Accelerometer: ")); 
+  printBool(readAccelerometer); 
+  //
+  USB.print(F("O3: ")); 
+  printBool(readO3); 
+  //
+  USB.print(F("NO2: ")); 
+  printBool(readNO2); 
+  //
+  USB.print(F("AP1: (C4H10, CH3CH2OH, H2, CO, CH4) : ")); 
+  printBool(readAP1); 
+  //
+  USB.print(F("AP2: (C6H5CH3, H2S, CH3CH2OH, NH3, H2) :"));
+  printBool(readAP2); 
+  //output rate 
+  USB.print(F("Output rate:")); 
+  USB.print(FRAME_DELAY_TIME); 
+  USB.println(F(" Seconds")); 
+  //Init time 
+  USB.print(F("Initialization time: "));
+  USB.print((int)initDelay); 
+  USB.println(F(" Seconds")); 
+
+}
+//calcualte the time needed for initialization of the sensors
+float calculateInitializationDelay(){
+  float result =1; 
+  if (readCO2|| readNO2 || readO3 || readAP1||readAP2) result+=40; 
+  return result; 
+}
+
+//performs the initialization delay with output every second
+void doInitializationDelay(){
+  USB.println(F("Wait for intialization")); 
+  for (int i=0;i<initDelay;i++){
+    delay(1000); 
+    USB.print(F(".")); 
+  } 
+  USB.println(F("")); 
+  USB.println(F("Initialization done"));
+}
+
+
+
+

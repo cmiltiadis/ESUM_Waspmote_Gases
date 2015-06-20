@@ -1,0 +1,21 @@
+/*
+ *  This program was written by Constantinos Miltiadis for The Chair of Information Architecture, ETH Zurich
+ *  http://www.ia.arch.ethz.ch
+ *  It uses the Libelium Waspmote v2.0 and the GAS board. 
+ *
+ *  Make sure that the sensors are attached on the right connectors, otherwise you could damage them.
+ *  For that consult the libelium PDF guide for this specific board:
+ *  http://www.libelium.com/development/waspmote/documentation/gases-board-technical-guide/
+ * 
+ *  For the board to function you should connect the supplied 3.7v battery regardless if the board is connected 
+ *  with USB. (a USB cannot provide enough current for this)
+ *
+ *  Sensors used:
+ *    Atmpspheric Pressure
+ *    Temperature
+ *    O3
+ *    Air pollutants 1 
+ *    Air pollutants 2 
+ *    CO2: S1A
+ *    NO2: S3B
+ */

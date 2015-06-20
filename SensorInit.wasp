@@ -1,0 +1,75 @@
+
+void initializeO3(){
+
+  // Turn on the sensor board
+  SensorGasv20.ON();
+
+  // Configure the 2B sensor socket
+  SensorGasv20.configureSensor(SENS_SOCKET2B, O3_GAIN, O3_RESISTOR);
+
+//  // Turn on the RTC
+//  RTC.ON();
+
+  // Turn on the sensor on socket 2B and wait for stabilization and
+  // sensor response time
+  SensorGasv20.setSensorMode(SENS_ON, SENS_SOCKET2B);
+
+}
+
+void initializeNO2(){
+  SensorGasv20.ON();
+
+//  // Turn on the RTC
+//  RTC.ON();
+
+  // Configure the 3B sensor socket
+  SensorGasv20.configureSensor(SENS_SOCKET3B, NO2_GAIN, NO2_RESISTOR);
+
+
+  // Turn on the sensor on socket 3B and wait for stabilization and
+  // sensor response time
+  SensorGasv20.setSensorMode(SENS_ON, SENS_SOCKET3B);
+}
+
+void initializeCO2(){
+//  // Turn on the sensor board
+//  SensorGasv20.ON();
+
+//  // Turn on the RTC
+//  RTC.ON();
+
+  // Configure the CO2 sensor socket
+  SensorGasv20.configureSensor(SENS_CO2, CO2_GAIN);
+
+  // Turn on the CO2 sensor and wait for stabilization and
+  // sensor response time
+  SensorGasv20.setSensorMode(SENS_ON, SENS_CO2);
+  //delay(40000);  
+}
+
+void initializeAP1(){ // at Connector S4
+ 
+//  // Turn on the RTC
+//  RTC.ON();
+
+  // Configure the 4A sensor socket
+  SensorGasv20.configureSensor(SENS_SOCKET4A, AP1_GAIN, AP1_RESISTOR);
+  // Turn on the sensor on socket 4A and wait for stabilization and
+  // sensor response time
+  SensorGasv20.setSensorMode(SENS_ON, SENS_SOCKET4A); 
+}
+
+void initializeAP2(){
+ 
+//  // Turn on the RTC
+//  RTC.ON();
+
+  // Configure the 3A sensor socket
+  SensorGasv20.configureSensor(SENS_SOCKET3A, AP2_GAIN,  AP2_RESISTOR);
+
+  
+  // Turn on the sensor on socket 3A and wait for stabilization and
+  // sensor response time
+  SensorGasv20.setSensorMode(SENS_ON, SENS_SOCKET3A); 
+}
+

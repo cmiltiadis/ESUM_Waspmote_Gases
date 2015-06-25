@@ -1,8 +1,7 @@
 
 void initializeO3(){
 
-  // Turn on the sensor board
-  SensorGasv20.ON();
+  switchBoardOn(); 
 
   // Configure the 2B sensor socket
   SensorGasv20.configureSensor(SENS_SOCKET2B, O3_GAIN, O3_RESISTOR);
@@ -17,7 +16,7 @@ void initializeO3(){
 }
 
 void initializeNO2(){
-  SensorGasv20.ON();
+ switchBoardOn(); 
 
 //  // Turn on the RTC
 //  RTC.ON();
@@ -33,7 +32,7 @@ void initializeNO2(){
 
 void initializeCO2(){
 //  // Turn on the sensor board
-//  SensorGasv20.ON();
+switchBoardOn(); 
 
 //  // Turn on the RTC
 //  RTC.ON();
@@ -71,5 +70,11 @@ void initializeAP2(){
   // Turn on the sensor on socket 3A and wait for stabilization and
   // sensor response time
   SensorGasv20.setSensorMode(SENS_ON, SENS_SOCKET3A); 
+}
+
+void initializePressure(){
+   if(readPressure){
+    SensorGasv20.setSensorMode(SENS_ON, SENS_PRESSURE);
+  } 
 }
 

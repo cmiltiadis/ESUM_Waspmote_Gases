@@ -2,16 +2,18 @@
 //LIBS
 #include <WaspSensorGas_v20.h>
 //CONSTANTS
-#define FRAME_DELAY_TIME 2 //secods
-
+#define FRAME_DELAY_TIME 1000 //delay time between readings (milliseconds)
+#define STABILIZATION_TIME 1000 // delay for the board to get measurements  (milliseconds)
 //SENSORS
 bool readTemp=true; 
 bool readPressure = true; 
 bool readHumidity=true; 
-bool readCO2=true; 
 
-bool readAccelerometer=true; 
+bool readAccelerometer=false; 
 bool isAccelInitialized=false; 
+
+//CO2
+bool readCO2=true; 
 //NH3
 //bool readNH3=true; 
 bool readO3=true; 
@@ -20,8 +22,11 @@ bool readNO2 = true;
 //Air pollutants
 bool readAP1=true; 
 bool readAP2=true; 
-//
+
+
+//FLAGS
 bool isRTCon=false; 
+bool isBoardOn= false; 
 
 
 //SENSOR CONSTANTS
@@ -35,7 +40,7 @@ bool isRTCon=false;
 #define AP2_GAIN  1      // GAIN of the sensor stage
 #define AP2_RESISTOR 20  // LOAD RESISTOR of the sensor stage
 //
-float initDelay; 
+float initDelay; //CALCULATED INITIALIZATION DELAY
 
 //parse token
 char token='$'; 
@@ -43,7 +48,7 @@ char token='$';
 void setup() {
   // put your setup code here, to run once:
   USB.ON();
-  USB.println(F("TC_Start_GAS_BOARD"));
+  USB.println(F("ESUM_GAS_BOARD"));
   //battery  
   getBatteryReading();
   //   
@@ -54,6 +59,10 @@ void setup() {
   isRTCon=true;
 
   delay(1000);
+  
+  if (readPressure){
+   initializePressure();  
+  }
   if (readO3){
     initializeO3(); 
   }
@@ -84,19 +93,17 @@ void setup() {
 void loop() {
 
   /*
+   ********************************************************************************
    *  GET SENSOR READINGS
+   ********************************************************************************
    */
 
   //switch board on
-  SensorGasv20.ON();
-  //initialize sensors
-  if(readPressure){
-    SensorGasv20.setSensorMode(SENS_ON, SENS_PRESSURE);
-  }
-  delay(20); 
-  /*
-   *Get sensor values
-   */
+  switchBoardOn(); 
+
+  //WAIT FOR THE SENSORS TO STABILIZE
+  delay(STABILIZATION_TIME); 
+ 
   //TEMPERATURE
   float tempVal=0;
   if (readTemp){
@@ -109,12 +116,12 @@ void loop() {
     //set sensors off 
     SensorGasv20.setSensorMode(SENS_OFF, SENS_PRESSURE);
   }
-
-  //HUMIDITY
+   //HUMIDITY
   float humidityVal=0; 
   if (readHumidity){
     humidityVal = SensorGasv20.readValue(SENS_HUMIDITY);
   }
+
   //O3
   float o3Val_volt=0; 
   float  o3Val_kohms;
@@ -153,16 +160,23 @@ void loop() {
     ap2Val_kohms = SensorGasv20.calculateResistance(SENS_SOCKET3A, ap2Val_volt, AP2_GAIN, AP2_RESISTOR);
 
   }
+  //Commented off to have less frame calculations
   //switch off board
-  SensorGasv20.OFF();
+  //switchBoardOff(); 
   //
 
   /*
-   *        PRINT VALUES
+   ********************************************************************************
+   *   OUTPUT READINGS
+   ********************************************************************************
    */
+
+    //SYNCH TOKEN DO NOT REMOVE / gives a sign that this is the start of the frame
+    USB.print(token); 
+
   //temperature
   if (readTemp){
-    USB.print(token); 
+
     USB.print(F("Temprature: ")); 
     USB.print(tempVal); 
     USB.println(F(" Celcius")); 
@@ -232,27 +246,10 @@ void loop() {
     USB.println(F("kohms")); 
   }
   //
-  delay(FRAME_DELAY_TIME*1000); 
+  delay(FRAME_DELAY_TIME); 
 }
 
-void getAccelValue(){
-  byte check = ACC.check();
 
-  //----------X Value-----------------------
-  int x_acc = ACC.getX();
-
-  //----------Y Value-----------------------
-  int y_acc = ACC.getY();
-  //----------Z Value-----------------------
-  int z_acc = ACC.getZ();
-  //-------------------------------
-  USB.print(F("ACC: ")); 
-  USB.print(x_acc, DEC);
-  USB.print(F(" / ")); 
-  USB.print(y_acc, DEC);
-  USB.print(F(" / ")); 
-  USB.println(z_acc, DEC); 
-}
 
 
 

@@ -58,7 +58,9 @@ void printSensorSetup(){
 //calcualte the time needed for initialization of the sensors
 float calculateInitializationDelay(){
   float result =1; 
-  if (readCO2|| readNO2 || readO3 || readAP1||readAP2) result+=40; 
+  if (readCO2 || readNO2 || readO3 || readAP1||readAP2){ 
+    result+=40; 
+  }
   return result; 
 }
 
@@ -72,6 +74,43 @@ void doInitializationDelay(){
   USB.println(F("")); 
   USB.println(F("Initialization done"));
 }
+
+//ACCELEROMETER READING
+void getAccelValue(){
+  byte check = ACC.check();
+
+  //----------X Value-----------------------
+  int x_acc = ACC.getX();
+
+  //----------Y Value-----------------------
+  int y_acc = ACC.getY();
+  //----------Z Value-----------------------
+  int z_acc = ACC.getZ();
+  //-------------------------------
+  USB.print(F("ACC: ")); 
+  USB.print(x_acc, DEC);
+  USB.print(F(" / ")); 
+  USB.print(y_acc, DEC);
+  USB.print(F(" / ")); 
+  USB.println(z_acc, DEC); 
+}
+
+// Turn on the sensor board
+void switchBoardOn(){
+  if (isBoardOn==false){  
+    SensorGasv20.ON(); 
+    isBoardOn= true;  
+  }
+}
+
+void switchBoardOff(){
+  if (isBoardOn==true){  
+    SensorGasv20.OFF(); 
+    isBoardOn= false;  
+  }
+}
+
+
 
 
 

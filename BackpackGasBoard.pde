@@ -7,6 +7,7 @@
 //SENSORS
 bool readTemp=true; 
 bool readPressure = true; 
+bool readHumidity=true; 
 bool readCO2=true; 
 
 bool readAccelerometer=true; 
@@ -51,7 +52,7 @@ void setup() {
   //
   RTC.ON();
   isRTCon=true;
-  
+
   delay(1000);
   if (readO3){
     initializeO3(); 
@@ -81,11 +82,11 @@ void setup() {
 }
 
 void loop() {
-  
+
   /*
    *  GET SENSOR READINGS
    */
-  
+
   //switch board on
   SensorGasv20.ON();
   //initialize sensors
@@ -107,6 +108,12 @@ void loop() {
     pressureVal = SensorGasv20.readValue(SENS_PRESSURE);
     //set sensors off 
     SensorGasv20.setSensorMode(SENS_OFF, SENS_PRESSURE);
+  }
+
+  //HUMIDITY
+  float humidityVal=0; 
+  if (readHumidity){
+    humidityVal = SensorGasv20.readValue(SENS_HUMIDITY);
   }
   //O3
   float o3Val_volt=0; 
@@ -151,7 +158,7 @@ void loop() {
   //
 
   /*
-   *print values
+   *        PRINT VALUES
    */
   //temperature
   if (readTemp){
@@ -166,6 +173,13 @@ void loop() {
     USB.print(pressureVal); 
     USB.println(F(" kPa"));
   }
+
+  if (readHumidity){
+    USB.print(F("Humidity: "));
+    USB.print(humidityVal);
+    USB.println(F("%RH")); 
+  }
+
   if (readAccelerometer && isAccelInitialized){
     getAccelValue();
   }
@@ -239,6 +253,7 @@ void getAccelValue(){
   USB.print(F(" / ")); 
   USB.println(z_acc, DEC); 
 }
+
 
 
 

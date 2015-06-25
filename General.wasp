@@ -25,6 +25,9 @@ void printSensorSetup(){
   USB.print(F("Pressure: ")); 
   printBool(readPressure); 
   //
+  USB.print(F("Humidity:")); 
+  printBool(readHumidity); 
+  //
   USB.print(F("CO2:")); 
   printBool(readCO2);  
   //
